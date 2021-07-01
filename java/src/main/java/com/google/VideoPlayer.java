@@ -56,13 +56,13 @@ public class VideoPlayer {
     if(video != null && video.getFlagged())
     {
       String reason = video.getFlaggedReason() != null ? video.getFlaggedReason() : "Not supplied";
-      System.out.println(String.format("Cannot add video to %s: Video is currently flagged (reason:" +
-              " %s)", video.getTitle(), reason));
+      System.out.println(String.format("Cannot play video: Video is currently flagged (reason:" +
+              " %s)", reason));
       return;
     }
 
     try{
-      if (this.currentPlayingVideoId != null)
+      if (this.currentPlayingVideoId != null && video != null)
         this.stopVideo();
 
       this.currentPlayingVideoId = videoId;
@@ -252,22 +252,22 @@ public class VideoPlayer {
         // Handle input
         this.playVideo(filteredVideoList.get(selection - 1).getVideoId());
       } else {
-        System.out.println(no);
+//        System.out.println(no);
       }
     } catch (Exception e) {
-      System.out.println(no);
+//      System.out.println(no);
     }
   }
 
   public void flagVideo(String videoId) {
-    if(this.currentPlayingVideoId != null)
+    if(Objects.equals(this.currentPlayingVideoId, videoId) || this.currentVideoPaused)
       this.stopVideo();
 
     this.videoLibrary.flagVideo(videoId, null);
   }
 
   public void flagVideo(String videoId, String reason) {
-    if(this.currentPlayingVideoId != null)
+    if(Objects.equals(this.currentPlayingVideoId, videoId) || this.currentVideoPaused)
       this.stopVideo();
 
     this.videoLibrary.flagVideo(videoId, reason);
